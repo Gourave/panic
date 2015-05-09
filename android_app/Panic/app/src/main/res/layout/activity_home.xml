@@ -1,22 +1,39 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:id="@+id/container"
-    android:layout_width="match_parent" android:layout_height="match_parent" tools:context=".Home"
-    tools:ignore="MergeRootFrame" >
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:flatui="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Home"
+    tools:ignore="MergeRootFrame">
 
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <Button
+        <!--<Button
             android:layout_width="350dp"
             android:layout_height="350dp"
             android:text="@string/panic_button"
             android:id="@+id/bPanic"
             android:layout_marginTop="34dp"
             android:layout_alignParentTop="false"
-            android:layout_centerHorizontal="false" />
+            android:layout_centerHorizontal="false" />-->
+
+        <!-- FlatButton -->
 
     </ScrollView>
 
-    </RelativeLayout>
+    <com.cengalabs.flatui.views.FlatButton
+        android:layout_width="350dp"
+        android:layout_height="350dp"
+        android:text="@string/panic_button"
+        android:id="@+id/bPanic"
+        android:layout_marginTop="33dp"
+        flatui:fl_touchEffect="fl_ripple"
+    flatui:fl_blockButtonEffectHeight="3dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>
