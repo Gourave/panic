@@ -6,5 +6,6 @@ module.exports = mongoose.model('PanicPackage',{
 	latitude:   Number,
 	date: { type: Date, default: Date.now },
 	heartbeat: Number,
-	temperature: Number
+	temperature: Number,
+	filename : String
 });

@@ -10,6 +10,7 @@ app.get('/', function(req, res) {
 	});
 });
 
+var filename;
 app.post('/', function(req, res) {
 	var name = req.body.name;
 	var longitude = req.body.longitude;
@@ -23,7 +24,8 @@ app.post('/', function(req, res) {
 			longitude : longitude,
 			latitude : latitude,
 			heartbeat : heartbeat,
-			temperature : temperature
+			temperature : temperature,
+			filename : filename
 		}
 	);	
 	newPanicPackage.save(function (err, result) {
@@ -33,6 +35,11 @@ app.post('/', function(req, res) {
 			res.send('success');
 		}
 	});
+});
+
+app.post('/upload', function(req, res) {
+  filename = req.files.filedata.name;
+  res.send('success');
 });
 
 module.exports = app;
