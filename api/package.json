@@ -13,7 +13,7 @@
     "jade": "~1.9.1",
     "morgan": "~1.5.1",
     "serve-favicon": "~2.2.0",
-    "multer": "~0.1.8"
+    "multer": "~0.1.8",
 	"mongoose": "~4.0.2"
   }
 }
