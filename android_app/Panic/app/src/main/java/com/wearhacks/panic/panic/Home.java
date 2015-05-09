@@ -24,9 +24,13 @@ public class Home extends ActionBarActivity implements LocationListener {
 
     String userLatitude;
     String userLongitude;
-    Button mPanicButton;
-    AudioRecording audio;
     boolean myoConnected;
+
+    Button mPanicButton;
+    Button mChangeMyo;
+
+    AudioRecording audio;
+
     RelativeLayout mLayoutHome;
 
     @Override
@@ -36,6 +40,7 @@ public class Home extends ActionBarActivity implements LocationListener {
 
         audio = new AudioRecording();
         mPanicButton = (Button)findViewById(R.id.bPanic);
+        mChangeMyo = (Button)findViewById(R.id.bChangeMyo);
         mLayoutHome = (RelativeLayout)findViewById(R.id.container_home);
 
         Hub hub = Hub.getInstance();
@@ -66,6 +71,24 @@ public class Home extends ActionBarActivity implements LocationListener {
                    }
                 });
                 audio.onRecord(false);
+            }
+        });
+
+        mChangeMyo.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Perform action on click
+                try {
+                    Hub.getInstance().removeListener(mListener);
+
+                    Intent intent = new Intent(Home.this, ScanActivity.class);
+                    Home.this.startActivity(intent);
+
+                    Hub.getInstance().addListener(mListener);
+                    Hub.getInstance().setLockingPolicy(Hub.LockingPolicy.NONE);
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -118,16 +141,7 @@ public class Home extends ActionBarActivity implements LocationListener {
 
         int id = item.getItemId();
 
-        if (id == R.id.Sync_Myo) {
-            Hub.getInstance().removeListener(mListener);
-
-            Intent intent = new Intent(Home.this, ScanActivity.class);
-            Home.this.startActivity(intent);
-
-            Hub.getInstance().addListener(mListener);
-            Hub.getInstance().setLockingPolicy(Hub.LockingPolicy.NONE);
-        }
-        else if (id == R.id.action_settings) {
+        if (id == R.id.action_settings) {
             Intent mOpenSettings = new Intent(this, Settings.class);
             startActivity(mOpenSettings);
 

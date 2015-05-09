@@ -9,5 +9,6 @@
 
     <string name="EditText_Age">Age</string>
     <string name="EditText_Emergency_Contact">Emergency Contact</string>
+    <string name="Change_Myo_Button">Change Myo</string>
 
 </resources>
