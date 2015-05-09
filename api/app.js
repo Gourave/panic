@@ -5,11 +5,11 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var multer = require('multer');
-var config = process.env.MONGO_URI || require('./env.json')['development'];
+var config = process.env.MONGO_URI || "mongodb://localhost:27017/panic";
 
 //Mongo
 var mongoose = require('mongoose');
-mongoose.connect(config.MONGO_URI);
+mongoose.connect(config);
 
 var routes = require('./routes/');
 
