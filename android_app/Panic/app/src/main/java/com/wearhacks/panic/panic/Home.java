@@ -39,6 +39,36 @@ public class Home extends ActionBarActivity implements LocationListener {
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+
+        //put code in here to release use of audio recorder and mic
+        releaseAudioRecorder();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // put code in here to resume the use of the audio recorder
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        // put in code to release use of audio recorder again
+        releaseAudioRecorder();
+    }
+
+    private void releaseAudioRecorder() {
+        // Write code here to release use of the audio recorder
+
+
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_home, menu);
@@ -77,9 +107,6 @@ public class Home extends ActionBarActivity implements LocationListener {
     @Override
     public void onProviderDisabled(String provider) { }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
     public static class PlaceholderFragment extends Fragment {
 
         public PlaceholderFragment() {
