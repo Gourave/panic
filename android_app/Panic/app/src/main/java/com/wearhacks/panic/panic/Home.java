@@ -4,17 +4,12 @@ import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.os.Build;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.thalmic.myo.AbstractDeviceListener;
@@ -31,6 +26,8 @@ public class Home extends ActionBarActivity implements LocationListener {
     String userLongitude;
     Button mPanicButton;
     AudioRecording audio;
+    boolean myoConnected;
+    RelativeLayout mLayoutHome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +36,7 @@ public class Home extends ActionBarActivity implements LocationListener {
 
         audio = new AudioRecording();
         mPanicButton = (Button)findViewById(R.id.bPanic);
+        mLayoutHome = (RelativeLayout)findViewById(R.id.container_home);
 
         Hub hub = Hub.getInstance();
         if (!hub.init(this)) {
@@ -72,8 +70,6 @@ public class Home extends ActionBarActivity implements LocationListener {
         });
 
         Hub.getInstance().setLockingPolicy(Hub.LockingPolicy.NONE);
-
-        //Hub.getInstance().addListener(mListener);
 
     }
 
@@ -148,6 +144,7 @@ public class Home extends ActionBarActivity implements LocationListener {
         @Override
         public void onConnect(Myo myo, long timestamp) {
             Toast.makeText(Home.this, "Myo Connected!", Toast.LENGTH_SHORT).show();
+            mLayoutHome.setBackgroundColor(R.color.material_blue_grey_950);
         }
 
         @Override
