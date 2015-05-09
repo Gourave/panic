@@ -7,24 +7,6 @@
     tools:context=".Home"
     tools:ignore="MergeRootFrame">
 
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <!--<Button
-            android:layout_width="350dp"
-            android:layout_height="350dp"
-            android:text="@string/panic_button"
-            android:id="@+id/bPanic"
-            android:layout_marginTop="34dp"
-            android:layout_alignParentTop="false"
-            android:layout_centerHorizontal="false" />-->
-
-        <!-- FlatButton -->
-
-    </ScrollView>
-
     <com.cengalabs.flatui.views.FlatButton
         android:layout_width="350dp"
         android:layout_height="350dp"

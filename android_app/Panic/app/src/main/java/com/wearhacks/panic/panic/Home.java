@@ -7,6 +7,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,6 +16,13 @@ import android.view.ViewGroup;
 import android.os.Build;
 import android.widget.Button;
 import android.widget.Toast;
+
+import com.thalmic.myo.AbstractDeviceListener;
+import com.thalmic.myo.DeviceListener;
+import com.thalmic.myo.Hub;
+import com.thalmic.myo.Myo;
+import com.thalmic.myo.Pose;
+import com.thalmic.myo.scanner.ScanActivity;
 
 
 public class Home extends ActionBarActivity implements LocationListener {
@@ -31,6 +39,16 @@ public class Home extends ActionBarActivity implements LocationListener {
 
         audio = new AudioRecording();
         mPanicButton = (Button)findViewById(R.id.bPanic);
+
+        Hub hub = Hub.getInstance();
+        if (!hub.init(this)) {
+            System.out.println("Could not initialize the Hub.");
+            finish();
+            return;
+        }
+
+        Intent intent = new Intent(Home.this, ScanActivity.class);
+        Home.this.startActivity(intent);
 
         mPanicButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -53,6 +71,10 @@ public class Home extends ActionBarActivity implements LocationListener {
             }
         });
 
+        Hub.getInstance().setLockingPolicy(Hub.LockingPolicy.NONE);
+
+        //Hub.getInstance().addListener(mListener);
+
     }
 
     @Override
@@ -66,11 +88,14 @@ public class Home extends ActionBarActivity implements LocationListener {
     public void onPause() {
         super.onPause();
 
+        Hub.getInstance().removeListener(mListener);
     }
 
     @Override
     public void onResume() {
         super.onResume();
+
+        Hub.getInstance().addListener(mListener);
 
     }
 
@@ -78,6 +103,7 @@ public class Home extends ActionBarActivity implements LocationListener {
     public void onDestroy() {
         super.onDestroy();
 
+        Hub.getInstance().removeListener(mListener);
     }
 
     @Override
@@ -117,5 +143,24 @@ public class Home extends ActionBarActivity implements LocationListener {
     public void onProviderEnabled(String provider) { }
     @Override
     public void onProviderDisabled(String provider) { }
+
+    private DeviceListener mListener = new AbstractDeviceListener() {
+        @Override
+        public void onConnect(Myo myo, long timestamp) {
+            Toast.makeText(Home.this, "Myo Connected!", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onDisconnect(Myo myo, long timestamp) {
+            Toast.makeText(Home.this, "Myo Disconnected!", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onPose(Myo myo, long timestamp, Pose pose) {
+            Toast.makeText(Home.this, "Pose: " + pose, Toast.LENGTH_SHORT).show();
+
+            //TODO: Do something awesome.
+        }
+    };
 
 }
