@@ -4,7 +4,7 @@
     android:id="@+id/container_home"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/primary_dark_material_light"
+    android:background="@color/background_material_light"
     tools:context=".Home"
     tools:ignore="MergeRootFrame">
 
@@ -15,7 +15,7 @@
         android:id="@+id/bPanic"
         android:layout_marginTop="33dp"
         flatui:fl_touchEffect="fl_ripple"
-    flatui:fl_blockButtonEffectHeight="3dp"
+        flatui:fl_blockButtonEffectHeight="3dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 

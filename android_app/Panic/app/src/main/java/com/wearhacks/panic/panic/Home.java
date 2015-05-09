@@ -91,6 +91,10 @@ public class Home extends ActionBarActivity implements LocationListener {
     public void onResume() {
         super.onResume();
 
+        // Adjust the size of the button so that it takes up most of the screen space.
+        // mPanicButton.setWidth();
+        // mPanicButton.setHeight();
+        
         Hub.getInstance().addListener(mListener);
 
     }
