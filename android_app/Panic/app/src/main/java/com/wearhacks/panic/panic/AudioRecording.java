@@ -12,36 +12,35 @@ public class AudioRecording {
         mRecorder = null;
     }
 
-    public MediaRecorder onRecord(boolean start) {
-        if (start) {
-            return startRecording();
-        }
+    public void onRecord(boolean start) {
+        if ( start )
+            startRecording();
         else
-            return stopRecording();
+            stopRecording();
     }
 
-    private MediaRecorder startRecording() {
+    private void startRecording() {
         mRecorder = new MediaRecorder();
+
         mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
         mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
 
         try {
             mRecorder.prepare();
+            mRecorder.start();
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
 
-        mRecorder.start();
-
-        return null;
     }
 
-    private MediaRecorder stopRecording() {
-        mRecorder.stop();
+    private void stopRecording() {
+//        mRecorder.stop();
         mRecorder.release();
         mRecorder = null;
 
-        return mRecorder;
+        System.out.println("Success!");
     }
 
 }

@@ -19,7 +19,8 @@ import android.widget.Toast;
 
 public class Home extends ActionBarActivity implements LocationListener {
 
-    String locationCurrent;
+    String userLatitude;
+    String userLongitude;
     Button mPanicButton;
     AudioRecording audio;
 
@@ -27,11 +28,6 @@ public class Home extends ActionBarActivity implements LocationListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
-                    .commit();
-        }
 
         audio = new AudioRecording();
         mPanicButton = (Button)findViewById(R.id.bPanic);
@@ -40,6 +36,19 @@ public class Home extends ActionBarActivity implements LocationListener {
             public void onClick(View v) {
                 // Perform action on click
                 audio.onRecord(true);
+
+                Thread stopRecording = new Thread(new Runnable() {
+                   @Override
+                   public void run() {
+                       try {
+                           Thread.sleep(15000);
+                           audio.onRecord(false);
+                       }
+                       catch (Exception e) {
+                           e.printStackTrace();
+                       }
+                   }
+                });
                 audio.onRecord(false);
             }
         });
@@ -49,6 +58,7 @@ public class Home extends ActionBarActivity implements LocationListener {
     @Override
     public void onStart() {
         super.onStart();
+
 
     }
 
@@ -97,9 +107,12 @@ public class Home extends ActionBarActivity implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
-        locationCurrent = location.getLatitude() + "," + location.getLongitude();
 
-        Toast.makeText(Home.this, locationCurrent, Toast.LENGTH_SHORT).show();
+        userLatitude = Double.toString(location.getLatitude());
+        userLongitude = Double.toString(location.getLongitude());
+
+        // Below is for testing
+        Toast.makeText(Home.this, userLatitude, Toast.LENGTH_SHORT).show();
     }
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) { }
@@ -107,20 +120,5 @@ public class Home extends ActionBarActivity implements LocationListener {
     public void onProviderEnabled(String provider) { }
     @Override
     public void onProviderDisabled(String provider) { }
-
-    public static class PlaceholderFragment extends Fragment {
-
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_home, container, false);
-            return rootView;
-        }
-    }
-
-
 
 }
