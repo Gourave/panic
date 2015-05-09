@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
+import android.widget.Toast;
 
 
 public class Home extends ActionBarActivity implements LocationListener {
@@ -35,6 +36,7 @@ public class Home extends ActionBarActivity implements LocationListener {
     public void onStart() {
         super.onStart();
 
+        startAudioRecorder();
 
     }
 
@@ -51,6 +53,8 @@ public class Home extends ActionBarActivity implements LocationListener {
         super.onResume();
 
         // put code in here to resume the use of the audio recorder
+        startAudioRecorder();
+
 
     }
 
@@ -60,6 +64,12 @@ public class Home extends ActionBarActivity implements LocationListener {
 
         // put in code to release use of audio recorder again
         releaseAudioRecorder();
+    }
+
+
+    private void startAudioRecorder() {
+        // Write code here to start the use of the audio recorder
+
     }
 
     private void releaseAudioRecorder() {
@@ -96,14 +106,13 @@ public class Home extends ActionBarActivity implements LocationListener {
     @Override
     public void onLocationChanged(Location location) {
         locationCurrent = location.getLatitude() + "," + location.getLongitude();
-    }
 
+        Toast.makeText(Home.this, locationCurrent, Toast.LENGTH_SHORT).show();
+    }
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) { }
-
     @Override
     public void onProviderEnabled(String provider) { }
-
     @Override
     public void onProviderDisabled(String provider) { }
 
@@ -119,4 +128,6 @@ public class Home extends ActionBarActivity implements LocationListener {
             return rootView;
         }
     }
+
+
 }

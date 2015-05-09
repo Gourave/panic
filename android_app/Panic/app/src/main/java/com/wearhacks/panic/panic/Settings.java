@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 
 public class Settings extends ActionBarActivity {
@@ -23,6 +24,9 @@ public class Settings extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+        mAge = (EditText)findViewById(R.id.etAge);
+        mEmergency = (EditText)findViewById(R.id.etEmergencyContact);
+
         age = 0;
         emergency ="";
     }
@@ -31,20 +35,13 @@ public class Settings extends ActionBarActivity {
     public void onStart() {
         super.onStart();
 
-        age = Integer.parseInt(mAge.getText().toString());
-        emergency = mEmergency.getText().toString();
-
         mAge.addTextChangedListener(new TextWatcher(){
             public void afterTextChanged(Editable s) {
-                //tv.setText(txtMessage.getText().toString().length());
                 if (checkInteger(mAge.getText().toString())) {
                     age = Integer.parseInt(mAge.getText().toString());
                 }
                 else
                     age = 0;
-
-                emergency = mEmergency.getText().toString();
-
             }
             public void beforeTextChanged(CharSequence s, int start, int count, int after){}
             public void onTextChanged(CharSequence s, int start, int before, int count){}
@@ -76,7 +73,5 @@ public class Settings extends ActionBarActivity {
     public void setEmergency(String emergency) {
         this.emergency = emergency;
     }
-
-
 
 }
