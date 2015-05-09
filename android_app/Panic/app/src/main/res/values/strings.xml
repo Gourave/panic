@@ -3,4 +3,11 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="panic_button">Panic</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <string name="EditText_Age">Age</string>
+    <string name="EditText_Emergency_Contact">Emergency Contact</string>
+
 </resources>
