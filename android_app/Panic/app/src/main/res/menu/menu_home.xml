@@ -7,4 +7,9 @@
         android:orderInCategory="100"
         app:showAsAction="never" />
 
+    <item android:id="@+id/Sync_Myo"
+        android:title="Sync Myo"
+        android:orderInCategory="100"
+        app:showAsAction="ifRoom" />
+
 </menu>

@@ -18,7 +18,9 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name=".Home"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:configChanges="orientation|keyboardHidden|screenSize">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,7 +30,8 @@
         <activity
             android:name=".Settings"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".Home" >
+            android:parentActivityName=".Home"
+            android:configChanges="orientation|keyboardHidden|screenSize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.wearhacks.panic.panic.Home" />

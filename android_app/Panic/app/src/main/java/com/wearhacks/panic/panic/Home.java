@@ -114,7 +114,16 @@ public class Home extends ActionBarActivity implements LocationListener {
 
         int id = item.getItemId();
 
-        if (id == R.id.action_settings) {
+        if (id == R.id.Sync_Myo) {
+            Hub.getInstance().removeListener(mListener);
+
+            Intent intent = new Intent(Home.this, ScanActivity.class);
+            Home.this.startActivity(intent);
+
+            Hub.getInstance().addListener(mListener);
+            Hub.getInstance().setLockingPolicy(Hub.LockingPolicy.NONE);
+        }
+        else if (id == R.id.action_settings) {
             Intent mOpenSettings = new Intent(this, Settings.class);
             startActivity(mOpenSettings);
 
@@ -143,8 +152,9 @@ public class Home extends ActionBarActivity implements LocationListener {
     private DeviceListener mListener = new AbstractDeviceListener() {
         @Override
         public void onConnect(Myo myo, long timestamp) {
-            Toast.makeText(Home.this, "Myo Connected!", Toast.LENGTH_SHORT).show();
-            mLayoutHome.setBackgroundColor(R.color.material_blue_grey_950);
+            for (int i = 1; i <= 2; i++) {
+                myo.vibrate(Myo.VibrationType.SHORT);
+            }
         }
 
         @Override
