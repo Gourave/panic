@@ -1,2 +1,2 @@
 # Panic
-For hackathon
+Wearhacks Toronto 2015 Hackathon submission
