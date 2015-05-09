@@ -1,19 +1,20 @@
 0 info it worked if it ends with ok
 1 verbose cli [ 'c:\\Program Files (x86)\\nodejs\\node.exe',
 1 verbose cli   'c:\\Program Files (x86)\\nodejs\\node_modules\\npm\\bin\\npm-cli.js',
-1 verbose cli   'start' ]
+1 verbose cli   'install',
+1 verbose cli   '--save' ]
 2 info using npm@1.4.28
 3 info using node@v0.10.36
-4 error Error: ENOENT, open 'C:\dev\panic\package.json'
-5 error If you need help, you may report this *entire* log,
-5 error including the npm and node versions, at:
-5 error     <http://github.com/npm/npm/issues>
+4 error install Couldn't read dependencies
+5 error package.json ENOENT, open 'c:\dev\panic\package.json'
+5 error package.json This is most likely not a problem with npm itself.
+5 error package.json npm can't find a package.json file in your current directory.
 6 error System Windows_NT 6.1.7600
-7 error command "c:\\Program Files (x86)\\nodejs\\node.exe" "c:\\Program Files (x86)\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "start"
-8 error cwd C:\dev\panic
+7 error command "c:\\Program Files (x86)\\nodejs\\node.exe" "c:\\Program Files (x86)\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "install" "--save"
+8 error cwd c:\dev\panic
 9 error node -v v0.10.36
 10 error npm -v 1.4.28
-11 error path C:\dev\panic\package.json
-12 error code ENOENT
+11 error path c:\dev\panic\package.json
+12 error code ENOPACKAGEJSON
 13 error errno 34
 14 verbose exit [ 34, true ]
