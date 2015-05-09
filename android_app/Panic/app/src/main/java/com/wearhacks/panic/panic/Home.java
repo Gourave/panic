@@ -24,7 +24,6 @@ public class Home extends ActionBarActivity implements LocationListener {
 
     String userLatitude;
     String userLongitude;
-    boolean myoConnected;
 
     Button mPanicButton;
     Button mChangeMyo;
@@ -93,33 +92,7 @@ public class Home extends ActionBarActivity implements LocationListener {
         });
 
         Hub.getInstance().setLockingPolicy(Hub.LockingPolicy.NONE);
-
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-
-        Hub.getInstance().removeListener(mListener);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        // Adjust the size of the button so that it takes up most of the screen space.
-        // mPanicButton.setWidth();
-        // mPanicButton.setHeight();
-
         Hub.getInstance().addListener(mListener);
-
     }
 
     @Override
@@ -177,14 +150,18 @@ public class Home extends ActionBarActivity implements LocationListener {
 
         @Override
         public void onDisconnect(Myo myo, long timestamp) {
-            Toast.makeText(Home.this, "Myo Disconnected!", Toast.LENGTH_SHORT).show();
+            myo.vibrate(Myo.VibrationType.LONG);
         }
 
         @Override
         public void onPose(Myo myo, long timestamp, Pose pose) {
-            Toast.makeText(Home.this, "Pose: " + pose, Toast.LENGTH_SHORT).show();
 
-            //TODO: Do something awesome.
+            if (pose != pose.REST) {
+                Toast.makeText(Home.this, "Pose: " + pose, Toast.LENGTH_SHORT).show();
+                myo.vibrate(Myo.VibrationType.SHORT);
+                System.out.println("Pose: " + pose);
+            }
+
         }
     };
 
