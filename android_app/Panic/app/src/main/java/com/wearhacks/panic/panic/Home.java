@@ -1,31 +1,106 @@
 package com.wearhacks.panic.panic;
 
 import android.content.Intent;
+import android.location.Location;
+import android.location.LocationListener;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.os.Build;
+import android.widget.Button;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
+
+import com.thalmic.myo.AbstractDeviceListener;
+import com.thalmic.myo.DeviceListener;
+import com.thalmic.myo.Hub;
+import com.thalmic.myo.Myo;
+import com.thalmic.myo.Pose;
+import com.thalmic.myo.scanner.ScanActivity;
 
 
-public class Home extends ActionBarActivity {
+public class Home extends ActionBarActivity implements LocationListener {
+
+    String userLatitude;
+    String userLongitude;
+    Button mPanicButton;
+    AudioRecording audio;
+    boolean myoConnected;
+    RelativeLayout mLayoutHome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
-                    .commit();
+
+        audio = new AudioRecording();
+        mPanicButton = (Button)findViewById(R.id.bPanic);
+        mLayoutHome = (RelativeLayout)findViewById(R.id.container_home);
+
+        Hub hub = Hub.getInstance();
+        if (!hub.init(this)) {
+            System.out.println("Could not initialize the Hub.");
+            finish();
+            return;
         }
+
+        Intent intent = new Intent(Home.this, ScanActivity.class);
+        Home.this.startActivity(intent);
+
+        mPanicButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Perform action on click
+                audio.onRecord(true);
+
+                Thread stopRecording = new Thread(new Runnable() {
+                   @Override
+                   public void run() {
+                       try {
+                           Thread.sleep(15000);
+                           audio.onRecord(false);
+                       }
+                       catch (Exception e) {
+                           e.printStackTrace();
+                       }
+                   }
+                });
+                audio.onRecord(false);
+            }
+        });
+
+        Hub.getInstance().setLockingPolicy(Hub.LockingPolicy.NONE);
+
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        Hub.getInstance().removeListener(mListener);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        Hub.getInstance().addListener(mListener);
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        Hub.getInstance().removeListener(mListener);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -36,12 +111,9 @@ public class Home extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             Intent mOpenSettings = new Intent(this, Settings.class);
             startActivity(mOpenSettings);
@@ -52,19 +124,40 @@ public class Home extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
+    @Override
+    public void onLocationChanged(Location location) {
 
-        public PlaceholderFragment() {
+        userLatitude = Double.toString(location.getLatitude());
+        userLongitude = Double.toString(location.getLongitude());
+
+        // Below is for testing
+        Toast.makeText(Home.this, userLatitude, Toast.LENGTH_SHORT).show();
+    }
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) { }
+    @Override
+    public void onProviderEnabled(String provider) { }
+    @Override
+    public void onProviderDisabled(String provider) { }
+
+    private DeviceListener mListener = new AbstractDeviceListener() {
+        @Override
+        public void onConnect(Myo myo, long timestamp) {
+            Toast.makeText(Home.this, "Myo Connected!", Toast.LENGTH_SHORT).show();
+            mLayoutHome.setBackgroundColor(R.color.material_blue_grey_950);
         }
 
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_home, container, false);
-            return rootView;
+        public void onDisconnect(Myo myo, long timestamp) {
+            Toast.makeText(Home.this, "Myo Disconnected!", Toast.LENGTH_SHORT).show();
         }
-    }
+
+        @Override
+        public void onPose(Myo myo, long timestamp, Pose pose) {
+            Toast.makeText(Home.this, "Pose: " + pose, Toast.LENGTH_SHORT).show();
+
+            //TODO: Do something awesome.
+        }
+    };
+
 }
