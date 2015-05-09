@@ -13,12 +13,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
+import android.widget.Button;
 import android.widget.Toast;
 
 
 public class Home extends ActionBarActivity implements LocationListener {
 
     String locationCurrent;
+    Button mPanicButton;
+    AudioRecording audio;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,13 +33,22 @@ public class Home extends ActionBarActivity implements LocationListener {
                     .commit();
         }
 
+        audio = new AudioRecording();
+        mPanicButton = (Button)findViewById(R.id.bPanic);
+
+        mPanicButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Perform action on click
+                audio.onRecord(true);
+                audio.onRecord(false);
+            }
+        });
+
     }
 
     @Override
     public void onStart() {
         super.onStart();
-
-        startAudioRecorder();
 
     }
 
@@ -44,37 +56,17 @@ public class Home extends ActionBarActivity implements LocationListener {
     public void onPause() {
         super.onPause();
 
-        //put code in here to release use of audio recorder and mic
-        releaseAudioRecorder();
     }
 
     @Override
     public void onResume() {
         super.onResume();
 
-        // put code in here to resume the use of the audio recorder
-        startAudioRecorder();
-
-
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-
-        // put in code to release use of audio recorder again
-        releaseAudioRecorder();
-    }
-
-
-    private void startAudioRecorder() {
-        // Write code here to start the use of the audio recorder
-
-    }
-
-    private void releaseAudioRecorder() {
-        // Write code here to release use of the audio recorder
-
 
     }
 
@@ -128,6 +120,7 @@ public class Home extends ActionBarActivity implements LocationListener {
             return rootView;
         }
     }
+
 
 
 }

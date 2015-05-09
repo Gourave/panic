@@ -1,8 +1,6 @@
 package com.wearhacks.panic.panic;
 
 import android.media.MediaRecorder;
-import android.os.Debug;
-import android.util.Log;
 
 import java.io.IOException;
 
@@ -14,7 +12,7 @@ public class AudioRecording {
         mRecorder = null;
     }
 
-    private MediaRecorder onRecord(boolean start) {
+    public MediaRecorder onRecord(boolean start) {
         if (start) {
             return startRecording();
         }
