@@ -1,2 +1,0 @@
-# Panic
-For hackathon
