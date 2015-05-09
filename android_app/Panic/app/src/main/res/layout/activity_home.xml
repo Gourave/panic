@@ -44,7 +44,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:id="@+id/Change_Myo_Background"
-        android:background="@color/sky_primary"/>
+        android:background="@color/sky_darker"/>
 
 </RelativeLayout>
 
