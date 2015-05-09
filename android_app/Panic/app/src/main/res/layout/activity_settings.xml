@@ -15,7 +15,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="33dp"
-        android:hint="@string/TextView_Age" />
+        android:hint="@string/EditText_Age" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -26,6 +26,6 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="100dp"
-        android:hint="@string/TextView_Emergency_Contact" />
+        android:hint="@string/EditText_Emergency_Contact" />
 
 </RelativeLayout>
