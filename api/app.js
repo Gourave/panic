@@ -5,7 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var multer = require('multer');
-var config = require('./env.json')[process.env.NODE_ENV || 'development'];
+var config = process.env.MONGO_URI || require('./env.json')['development'];
 
 //Mongo
 var mongoose = require('mongoose');
