@@ -248,7 +248,7 @@ public class Home extends ActionBarActivity {
                 public void success(String s, Response response) {
                     Log.d("HTTP: ", "Success!");
 
-                    message.sendTextMessage("6477200685", panicMessage + " Please visit http://panicapp.herokuapp.com");
+                    message.sendTextMessage("1234567890", panicMessage + " Please visit http://panicapp.herokuapp.com");
                 }
 
                 @Override
