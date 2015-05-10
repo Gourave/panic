@@ -21,7 +21,6 @@ import com.thalmic.myo.Myo;
 import com.thalmic.myo.Pose;
 import com.thalmic.myo.scanner.ScanActivity;
 import com.wearhacks.panic.panic.api.HttpMultipartUploader;
-import com.wearhacks.panic.panic.api.PaniacPackageAudio;
 import com.wearhacks.panic.panic.api.PanicPackage;
 import com.wearhacks.panic.panic.api.PanicPackageService;
 
@@ -29,7 +28,6 @@ import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
-import retrofit.mime.TypedFile;
 
 
 public class Home extends ActionBarActivity implements LocationListener {
@@ -66,6 +64,15 @@ public class Home extends ActionBarActivity implements LocationListener {
         temperature = 0;
         
         audio = new AudioRecording(getApplicationContext());
+        audio.setOnAudioRecordingCompleteListener(new AudioRecording.OnAudioRecordingCompleteListener() {
+            @Override
+            public void recordingComplete() {
+                //Upload the audio file after recording is complete
+                HttpMultipartUploader uploader = new HttpMultipartUploader();
+                uploader.execute(audio.getAudioFile());
+            }
+        });
+
         mPanicButton = (Button)findViewById(R.id.bPanic);
         mChangeMyo = (Button)findViewById(R.id.bChangeMyo);
         mLayoutHome = (RelativeLayout)findViewById(R.id.container_home);
@@ -93,23 +100,6 @@ public class Home extends ActionBarActivity implements LocationListener {
                 // Perform action on click
                 audio.onRecord(true);
 
-                /*Thread stopRecording = new Thread(new Runnable() {
-                   @Override
-                   public void run() {
-                       try {
-                           Thread.sleep(15000);
-                           audio.onRecord(false);
-                       }
-                       catch (Exception e) {
-                           e.printStackTrace();
-                       }
-                   }
-                });*/
-
-                // stopRecording.start();
-                //audio.onRecord(false);
-
-
                 pkg.name = name;
                 pkg.heartbeat = heartbeat;
                 pkg.latitude = latitude;
@@ -129,11 +119,6 @@ public class Home extends ActionBarActivity implements LocationListener {
                     }
                 });
 
-
-                HttpMultipartUploader uploader = new HttpMultipartUploader();
-                uploader.execute(audio.getAudioFile());
-
-                audio.onRecord(false);
 
             }
         });

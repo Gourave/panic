@@ -3,23 +3,34 @@ package com.wearhacks.panic.panic;
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
+import android.os.Environment;
+import android.os.Handler;
 
 import java.io.File;
 import java.io.IOException;
 
 public class AudioRecording {
 
+    private static final int RECORD_DURATION = 15000;
+    private static final int RECORD_DURATION_MAX = 30000;
+
     private MediaRecorder mRecorder;
+    private String filePath;
     private String fileName;
     private Context context;
-    private MediaPlayer mPlayer;
     private File audioFile;
+    private OnAudioRecordingCompleteListener listener;
 
     public AudioRecording(Context context) {
         mRecorder = null;
         this.context = context;
         audioFile = null;
         fileName = null;
+        filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/panicapp";
+
+        //Create directory structure if it doesn't exist
+        File file = new File(filePath);
+        file.mkdirs();
     }
 
     public void onRecord(boolean start) {
@@ -33,18 +44,16 @@ public class AudioRecording {
 
         mRecorder = new MediaRecorder();
 
-        fileName = "/" + Long.toString(System.currentTimeMillis()) + "3.gp";
+        fileName = "/" + Long.toString(System.currentTimeMillis()) + ".3gp";
 
         try {
             mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
             mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-            mRecorder.setOutputFile(context.getCacheDir().getPath() + fileName);
-
-            System.out.println(context.getCacheDir().getPath() + fileName);
-
             mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+            mRecorder.setOutputFile(filePath + fileName);
+            System.out.println(filePath + fileName);
 
-            mRecorder.setMaxDuration(15000);
+            mRecorder.setMaxDuration(RECORD_DURATION_MAX);
 
             System.out.println("setOutputFile");
 
@@ -56,19 +65,27 @@ public class AudioRecording {
             System.out.println(e.getMessage());
         }
 
-        audioFile = new File(context.getCacheDir().getPath() + fileName);
-        if(audioFile.exists()) {
-            System.out.println("Successfully saved audioFile!");
-        }
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                stopRecording();
 
+                audioFile = new File(filePath + fileName);
+                if(audioFile.exists()) {
+                    System.out.println("Successfully saved audioFile! Len: " + audioFile.length());
+                }
+
+                if (listener != null) listener.recordingComplete();
+            }
+        }, RECORD_DURATION);
     }
 
     private void stopRecording() {
-        // mRecorder.stop();
+        mRecorder.stop();
         mRecorder.release();
         mRecorder = null;
-
-        System.out.println("Success!");
+        System.out.println("Audio recording stopped.");
     }
 
     public File getAudioFile() {
@@ -79,4 +96,11 @@ public class AudioRecording {
         return fileName;
     }
 
+    public void setOnAudioRecordingCompleteListener (OnAudioRecordingCompleteListener listener) {
+        this.listener = listener;
+    }
+
+    public interface OnAudioRecordingCompleteListener {
+        void recordingComplete();
+    }
 }
