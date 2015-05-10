@@ -37,7 +37,7 @@ public class Home extends ActionBarActivity implements LocationListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        audio = new AudioRecording();
+        audio = new AudioRecording(getApplicationContext());
         mPanicButton = (Button)findViewById(R.id.bPanic);
         mChangeMyo = (Button)findViewById(R.id.bChangeMyo);
         mLayoutHome = (RelativeLayout)findViewById(R.id.container_home);
@@ -57,7 +57,7 @@ public class Home extends ActionBarActivity implements LocationListener {
                 // Perform action on click
                 audio.onRecord(true);
 
-                Thread stopRecording = new Thread(new Runnable() {
+                /*Thread stopRecording = new Thread(new Runnable() {
                    @Override
                    public void run() {
                        try {
@@ -68,8 +68,10 @@ public class Home extends ActionBarActivity implements LocationListener {
                            e.printStackTrace();
                        }
                    }
-                });
-                audio.onRecord(false);
+                });*/
+
+                // stopRecording.start();
+                //audio.onRecord(false);
             }
         });
 
