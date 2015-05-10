@@ -21,7 +21,12 @@ app.set('view engine', 'jade');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
-app.use(multer({dest:'./uploads/'}));
+app.use(multer({
+    dest:'./public/uploads/',
+    rename: function (fieldname, filename) {
+        return filename;
+    }
+}));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
