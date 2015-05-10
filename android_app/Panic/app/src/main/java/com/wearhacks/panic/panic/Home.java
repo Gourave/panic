@@ -20,6 +20,7 @@ import com.thalmic.myo.Hub;
 import com.thalmic.myo.Myo;
 import com.thalmic.myo.Pose;
 import com.thalmic.myo.scanner.ScanActivity;
+import com.wearhacks.panic.panic.api.HttpMultipartUploader;
 import com.wearhacks.panic.panic.api.PaniacPackageAudio;
 import com.wearhacks.panic.panic.api.PanicPackage;
 import com.wearhacks.panic.panic.api.PanicPackageService;
@@ -128,21 +129,9 @@ public class Home extends ActionBarActivity implements LocationListener {
                     }
                 });
 
-                PaniacPackageAudio pkgAudio = new PaniacPackageAudio();
-                pkgAudio.audio = audio.getAudioFile();
 
-                // BROKEN. FIX A$AP
-                service.upload(pkgAudio, "Paniac_Audio_File", new Callback<String>() {
-                    @Override
-                    public void success(String s, Response response) {
-                        Log.d("HTTP: ", "Success!");
-                    }
-
-                    @Override
-                    public void failure(RetrofitError error) {
-                        Log.d("HTTP: ", "Failed: " + error.getMessage());
-                    }
-                });
+                HttpMultipartUploader uploader = new HttpMultipartUploader();
+                uploader.execute(audio.getAudioFile());
 
                 audio.onRecord(false);
 
