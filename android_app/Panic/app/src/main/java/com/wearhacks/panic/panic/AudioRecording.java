@@ -3,7 +3,6 @@ package com.wearhacks.panic.panic;
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
-import android.util.Log;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,10 +13,13 @@ public class AudioRecording {
     private String fileName;
     private Context context;
     private MediaPlayer mPlayer;
+    private File audioFile;
 
     public AudioRecording(Context context) {
         mRecorder = null;
         this.context = context;
+        audioFile = null;
+        fileName = null;
     }
 
     public void onRecord(boolean start) {
@@ -54,19 +56,27 @@ public class AudioRecording {
             System.out.println(e.getMessage());
         }
 
-        File file = new File(context.getCacheDir().getPath() + fileName);
-        if(file.exists()) {
-            System.out.println("its here!");
+        audioFile = new File(context.getCacheDir().getPath() + fileName);
+        if(audioFile.exists()) {
+            System.out.println("Successfully saved audioFile!");
         }
 
     }
 
     private void stopRecording() {
-//        mRecorder.stop();
+        // mRecorder.stop();
         mRecorder.release();
         mRecorder = null;
 
         System.out.println("Success!");
+    }
+
+    public File getAudioFile() {
+        return audioFile;
+    }
+
+    public String getFileName() {
+        return fileName;
     }
 
 }

@@ -20,6 +20,7 @@ import com.thalmic.myo.Hub;
 import com.thalmic.myo.Myo;
 import com.thalmic.myo.Pose;
 import com.thalmic.myo.scanner.ScanActivity;
+import com.wearhacks.panic.panic.api.PaniacPackageAudio;
 import com.wearhacks.panic.panic.api.PanicPackage;
 import com.wearhacks.panic.panic.api.PanicPackageService;
 
@@ -27,19 +28,24 @@ import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import retrofit.mime.TypedFile;
 
 
 public class Home extends ActionBarActivity implements LocationListener {
 
-    String userLatitude;
-    String userLongitude;
+    private String userLatitude;
+    private String userLongitude;
 
-    Button mPanicButton;
-    Button mChangeMyo;
+    private Button mPanicButton;
+    private Button mChangeMyo;
 
-    AudioRecording audio;
+    private AudioRecording audio;
 
-    RelativeLayout mLayoutHome;
+    private RelativeLayout mLayoutHome;
+
+    private RestAdapter restAdapter;
+    private PanicPackageService service;
+    private PanicPackage pkg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +56,14 @@ public class Home extends ActionBarActivity implements LocationListener {
         mPanicButton = (Button)findViewById(R.id.bPanic);
         mChangeMyo = (Button)findViewById(R.id.bChangeMyo);
         mLayoutHome = (RelativeLayout)findViewById(R.id.container_home);
+
+        restAdapter = new RestAdapter.Builder()
+                .setEndpoint("http://panicapp.herokuapp.com")
+                .build();
+
+        service = restAdapter.create(PanicPackageService.class);
+
+        pkg = new PanicPackage();
 
         Hub hub = Hub.getInstance();
         if (!hub.init(this)) {
@@ -64,7 +78,7 @@ public class Home extends ActionBarActivity implements LocationListener {
         mPanicButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Perform action on click
-                // audio.onRecord(true);
+                audio.onRecord(true);
 
                 /*Thread stopRecording = new Thread(new Runnable() {
                    @Override
@@ -82,18 +96,13 @@ public class Home extends ActionBarActivity implements LocationListener {
                 // stopRecording.start();
                 //audio.onRecord(false);
 
-                RestAdapter restAdapter = new RestAdapter.Builder()
-                        .setEndpoint("http://panicapp.herokuapp.com")
-                        .build();
 
-                PanicPackageService service = restAdapter.create(PanicPackageService.class);
-
-                PanicPackage pkg = new PanicPackage();
                 pkg.name = "asd";
                 pkg.heartbeat = 12;
                 pkg.latitude = 1;
                 pkg.longitude = 4;
                 pkg.temperature = 20;
+                pkg.filename = audio.getFileName();
 
                 service.submitPackage(pkg, new Callback<String>() {
                     @Override
@@ -106,6 +115,24 @@ public class Home extends ActionBarActivity implements LocationListener {
                         Log.d("HTTP: ", "Failed: " + error.getMessage());
                     }
                 });
+
+                PaniacPackageAudio pkgAudio = new PaniacPackageAudio();
+                pkgAudio.audio = audio.getAudioFile();
+
+                service.upload(pkgAudio, "Paniac_Audio_File", new Callback<String>() {
+                    @Override
+                    public void success(String s, Response response) {
+                        Log.d("HTTP: ", "Success!");
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        Log.d("HTTP: ", "Failed: " + error.getMessage());
+                    }
+                });
+
+                audio.onRecord(false);
+
             }
         });
 

@@ -10,7 +10,6 @@ public class PanicPackage {
     public double latitude;
     public int heartbeat;
     public int temperature;
-
-
+    public String filename;
 
 }
