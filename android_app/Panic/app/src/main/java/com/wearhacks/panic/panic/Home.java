@@ -119,6 +119,7 @@ public class Home extends ActionBarActivity implements LocationListener {
                 PaniacPackageAudio pkgAudio = new PaniacPackageAudio();
                 pkgAudio.audio = audio.getAudioFile();
 
+                // BROKEN. FIX A$AP
                 service.upload(pkgAudio, "Paniac_Audio_File", new Callback<String>() {
                     @Override
                     public void success(String s, Response response) {
