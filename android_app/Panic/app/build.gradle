@@ -26,7 +26,8 @@ dependencies {
 
     repositories {
         maven {
-            url '/Users/Gourave/Desktop/myo-android-sdk-0.10.0/myorepository'
+            url '/home/aaron/Desktop/myo-android-sdk-0.10.0/myorepository'
+            //url '/Users/Gourave/Desktop/myo-android-sdk-0.10.0/myorepository'
         }
     }
 
@@ -34,4 +35,12 @@ dependencies {
     compile 'com.github.eluleci:flatui:3.0.0'
     compile 'com.squareup.retrofit:retrofit:1.9.0'
 
+    repositories{
+        mavenCentral()
+    }
+    dependencies {
+        compile("org.apache.httpcomponents:httpmime:4.2.6") {
+            exclude module: 'httpcore';
+        }
+    }
 }
