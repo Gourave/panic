@@ -3,8 +3,10 @@ package com.wearhacks.panic.panic;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
+import android.nfc.Tag;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +20,13 @@ import com.thalmic.myo.Hub;
 import com.thalmic.myo.Myo;
 import com.thalmic.myo.Pose;
 import com.thalmic.myo.scanner.ScanActivity;
+import com.wearhacks.panic.panic.api.PanicPackage;
+import com.wearhacks.panic.panic.api.PanicPackageService;
+
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 
 public class Home extends ActionBarActivity implements LocationListener {
@@ -55,7 +64,7 @@ public class Home extends ActionBarActivity implements LocationListener {
         mPanicButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Perform action on click
-                audio.onRecord(true);
+                // audio.onRecord(true);
 
                 /*Thread stopRecording = new Thread(new Runnable() {
                    @Override
@@ -72,6 +81,31 @@ public class Home extends ActionBarActivity implements LocationListener {
 
                 // stopRecording.start();
                 //audio.onRecord(false);
+
+                RestAdapter restAdapter = new RestAdapter.Builder()
+                        .setEndpoint("http://panicapp.herokuapp.com")
+                        .build();
+
+                PanicPackageService service = restAdapter.create(PanicPackageService.class);
+
+                PanicPackage pkg = new PanicPackage();
+                pkg.name = "asd";
+                pkg.heartbeat = 12;
+                pkg.latitude = 1;
+                pkg.longitude = 4;
+                pkg.temperature = 20;
+
+                service.submitPackage(pkg, new Callback<String>() {
+                    @Override
+                    public void success(String s, Response response) {
+                        Log.d("HTTP: ", "Success!");
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        Log.d("HTTP: ", "Failed: " + error.getMessage());
+                    }
+                });
             }
         });
 
