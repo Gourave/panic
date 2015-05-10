@@ -26,14 +26,15 @@ dependencies {
 
     repositories {
         maven {
-            // url '/home/aaron/Desktop/myo-android-sdk-0.10.0/myorepository'
-            url '/Users/Gourave/Desktop/myo-android-sdk-0.10.0/myorepository'
+            url '/home/aaron/Desktop/myo-android-sdk-0.10.0/myorepository'
+            //url '/Users/Gourave/Desktop/myo-android-sdk-0.10.0/myorepository'
         }
     }
 
     compile('com.thalmic:myosdk:0.10.+@aar')
     compile 'com.github.eluleci:flatui:3.0.0'
     compile 'com.squareup.retrofit:retrofit:1.9.0'
+    compile 'com.google.android.gms:play-services:6.5.87'
 
     repositories{
         mavenCentral()
