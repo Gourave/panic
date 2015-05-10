@@ -1,1 +1,19 @@
-<div class="container"> <h2>Sketch Map</h2> <div id="map_canvas" ng-controller="MapCtrl"> <ui-gmap-google-map center="map.center" zoom="map.zoom" draggable="true" options="options" bounds="map.bounds"> <ui-gmap-markers models="panicMarkers" coords="'self'" icon="'icon'" click="'click'"> <ui-gmap-windows show="show"> <div ng-non-bindable> Name: {{name}} <br> Date: {{Date}} <br> <a href="https://panicapp.herokuapp.com/uploads{{filename}}" target="_blank"> Audio </a> <br> &nbsp </div> </ui-gmap-windows> </ui-gmap-markers> </ui-gmap-google-map> </div> </div>
+<div class="container">
+    <h2>Sketch Map</h2>
+    <div id="map_canvas" ng-controller="MapCtrl">
+        <ui-gmap-google-map center="map.center" zoom="map.zoom" draggable="true" options="options" bounds="map.bounds">
+            <ui-gmap-markers models="panicMarkers" coords="'self'" icon="'icon'" click="'click'">
+                <ui-gmap-windows show="show">
+                    <div ng-non-bindable>
+                        Name: {{name}}
+                        <br>
+                        Date: {{Date}}
+                        <br>
+                        <a href="https://panicapp.herokuapp.com/uploads{{filename}}" target="_blank"> Audio </a>
+                        <br> &nbsp
+                    </div>
+                </ui-gmap-windows>
+            </ui-gmap-markers>
+        </ui-gmap-google-map>
+    </div>
+</div>
