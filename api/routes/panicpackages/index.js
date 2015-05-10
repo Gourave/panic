@@ -21,16 +21,16 @@ app.get('/markers', function(req, res) {
 		}
 		res.json(markersList);
 	});
-	
 });
 
-var filename;
+
 app.post('/', function(req, res) {
 	var name = req.body.name;
 	var longitude = req.body.longitude;
 	var latitude = req.body.latitude;
 	var heartbeat = req.body.heartbeat;
 	var temperature = req.body.temperature;
+	var filename = req.body.filename;
 
 	var newPanicPackage = new PanicPackage(
 		{
