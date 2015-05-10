@@ -12,6 +12,7 @@
         android:layout_width="350dp"
         android:layout_height="350dp"
         android:text="@string/panic_button"
+
         android:id="@+id/bPanic"
         android:layout_marginTop="33dp"
         android:layout_marginLeft="30dp"

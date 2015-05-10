@@ -13,9 +13,11 @@ import android.widget.Toast;
 
 public class Settings extends ActionBarActivity {
 
+    EditText mName;
     EditText mAge;
     EditText mEmergency;
 
+    String name;
     int age;
     String emergency;
 
@@ -24,9 +26,11 @@ public class Settings extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+        mName = (EditText)findViewById(R.id.etName);
         mAge = (EditText)findViewById(R.id.etAge);
         mEmergency = (EditText)findViewById(R.id.etEmergencyContact);
 
+        name = "";
         age = 0;
         emergency ="";
     }

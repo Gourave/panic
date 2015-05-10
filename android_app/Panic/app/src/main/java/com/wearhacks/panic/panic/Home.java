@@ -1,9 +1,11 @@
 package com.wearhacks.panic.panic;
 
+import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.nfc.Tag;
+import android.os.Vibrator;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -52,6 +54,8 @@ public class Home extends ActionBarActivity implements LocationListener {
     private double longitude;
     private int temperature;
 
+    private Vibrator v;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,7 +66,7 @@ public class Home extends ActionBarActivity implements LocationListener {
         latitude = 0;
         longitude = 0;
         temperature = 0;
-        
+
         audio = new AudioRecording(getApplicationContext());
         audio.setOnAudioRecordingCompleteListener(new AudioRecording.OnAudioRecordingCompleteListener() {
             @Override
@@ -76,6 +80,8 @@ public class Home extends ActionBarActivity implements LocationListener {
         mPanicButton = (Button)findViewById(R.id.bPanic);
         mChangeMyo = (Button)findViewById(R.id.bChangeMyo);
         mLayoutHome = (RelativeLayout)findViewById(R.id.container_home);
+
+        mPanicButton.setEnabled(true);
 
         restAdapter = new RestAdapter.Builder()
                 .setEndpoint("http://panicapp.herokuapp.com")
@@ -98,7 +104,7 @@ public class Home extends ActionBarActivity implements LocationListener {
         mPanicButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Perform action on click
-                audio.onRecord(true);
+                /*audio.onRecord(true);
 
                 pkg.name = name;
                 pkg.heartbeat = heartbeat;
@@ -117,7 +123,8 @@ public class Home extends ActionBarActivity implements LocationListener {
                     public void failure(RetrofitError error) {
                         Log.d("HTTP: ", "Failed: " + error.getMessage());
                     }
-                });
+                });*/
+                panicCommand();
 
 
             }
@@ -186,7 +193,7 @@ public class Home extends ActionBarActivity implements LocationListener {
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) { }
     @Override
-    public void onProviderEnabled(String provider) { }
+    public void onProviderEnabled(String provider) {  }
     @Override
     public void onProviderDisabled(String provider) { }
 
@@ -206,13 +213,48 @@ public class Home extends ActionBarActivity implements LocationListener {
         @Override
         public void onPose(Myo myo, long timestamp, Pose pose) {
 
-            if (pose != pose.REST) {
-                Toast.makeText(Home.this, "Pose: " + pose, Toast.LENGTH_SHORT).show();
+            if (pose == pose.FIST) {
+                //Toast.makeText(Home.this, "Pose: " + pose, Toast.LENGTH_SHORT).show();
                 myo.vibrate(Myo.VibrationType.SHORT);
-                System.out.println("Pose: " + pose);
+                v = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
+
+                // Vibrate for 500 milliseconds
+                v.vibrate(500);
+
+                panicCommand();
             }
 
         }
     };
+
+    private void panicCommand() {
+
+        if (mPanicButton.isEnabled()) {
+            mPanicButton.setEnabled( false );
+
+            audio.onRecord(true);
+
+            pkg.name = name;
+            pkg.heartbeat = heartbeat;
+            pkg.latitude = latitude;
+            pkg.longitude = longitude;
+            pkg.temperature = temperature;
+            pkg.filename = audio.getFileName();
+
+            service.submitPackage(pkg, new Callback<String>() {
+                @Override
+                public void success(String s, Response response) {
+                    Log.d("HTTP: ", "Success!");
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    Log.d("HTTP: ", "Failed: " + error.getMessage());
+                }
+            });
+        }
+
+        mPanicButton.setEnabled( true );
+    }
 
 }

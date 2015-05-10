@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:inputType="textCapCharacters"
         android:ems="10"
-        android:id="@+id/EditText_Name"
+        android:id="@+id/etName"
         android:hint="@string/etName"
         android:layout_alignParentTop="true"
         android:layout_alignStart="@+id/etAge" />
