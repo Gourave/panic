@@ -15,7 +15,7 @@ app.get('/markers', function(req, res) {
 		for (var i = 0; i < results.length; i++) {
 			var result = results[i];
 			var newMarker = {
-				latitude: result.latitude, longitude : result.longitude, title : result.name
+				id : result._id ,latitude: result.latitude, longitude : result.longitude, title : result.name
 			};
 			markersList.push(newMarker);
 		}
