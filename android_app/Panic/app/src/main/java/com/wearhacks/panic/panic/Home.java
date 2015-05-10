@@ -3,8 +3,10 @@ package com.wearhacks.panic.panic;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
+import android.nfc.Tag;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,30 +20,70 @@ import com.thalmic.myo.Hub;
 import com.thalmic.myo.Myo;
 import com.thalmic.myo.Pose;
 import com.thalmic.myo.scanner.ScanActivity;
+import com.wearhacks.panic.panic.api.HttpMultipartUploader;
+import com.wearhacks.panic.panic.api.PanicPackage;
+import com.wearhacks.panic.panic.api.PanicPackageService;
+
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 
 public class Home extends ActionBarActivity implements LocationListener {
 
-    String userLatitude;
-    String userLongitude;
-    boolean myoConnected;
+    private String userLatitude;
+    private String userLongitude;
 
-    Button mPanicButton;
-    Button mChangeMyo;
+    private Button mPanicButton;
+    private Button mChangeMyo;
 
-    AudioRecording audio;
+    private AudioRecording audio;
 
-    RelativeLayout mLayoutHome;
+    private RelativeLayout mLayoutHome;
+
+    private RestAdapter restAdapter;
+    private PanicPackageService service;
+    private PanicPackage pkg;
+
+    private String name;
+    private int heartbeat;
+    private double latitude;
+    private double longitude;
+    private int temperature;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        audio = new AudioRecording();
+        name = "";
+        heartbeat = 0;
+        latitude = 0;
+        longitude = 0;
+        temperature = 0;
+        
+        audio = new AudioRecording(getApplicationContext());
+        audio.setOnAudioRecordingCompleteListener(new AudioRecording.OnAudioRecordingCompleteListener() {
+            @Override
+            public void recordingComplete() {
+                //Upload the audio file after recording is complete
+                HttpMultipartUploader uploader = new HttpMultipartUploader();
+                uploader.execute(audio.getAudioFile());
+            }
+        });
+
         mPanicButton = (Button)findViewById(R.id.bPanic);
         mChangeMyo = (Button)findViewById(R.id.bChangeMyo);
         mLayoutHome = (RelativeLayout)findViewById(R.id.container_home);
+
+        restAdapter = new RestAdapter.Builder()
+                .setEndpoint("http://panicapp.herokuapp.com")
+                .build();
+
+        service = restAdapter.create(PanicPackageService.class);
+
+        pkg = new PanicPackage();
 
         Hub hub = Hub.getInstance();
         if (!hub.init(this)) {
@@ -58,19 +100,26 @@ public class Home extends ActionBarActivity implements LocationListener {
                 // Perform action on click
                 audio.onRecord(true);
 
-                Thread stopRecording = new Thread(new Runnable() {
-                   @Override
-                   public void run() {
-                       try {
-                           Thread.sleep(15000);
-                           audio.onRecord(false);
-                       }
-                       catch (Exception e) {
-                           e.printStackTrace();
-                       }
-                   }
+                pkg.name = name;
+                pkg.heartbeat = heartbeat;
+                pkg.latitude = latitude;
+                pkg.longitude = longitude;
+                pkg.temperature = temperature;
+                pkg.filename = audio.getFileName();
+
+                service.submitPackage(pkg, new Callback<String>() {
+                    @Override
+                    public void success(String s, Response response) {
+                        Log.d("HTTP: ", "Success!");
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        Log.d("HTTP: ", "Failed: " + error.getMessage());
+                    }
                 });
-                audio.onRecord(false);
+
+
             }
         });
 
@@ -93,33 +142,7 @@ public class Home extends ActionBarActivity implements LocationListener {
         });
 
         Hub.getInstance().setLockingPolicy(Hub.LockingPolicy.NONE);
-
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-
-        Hub.getInstance().removeListener(mListener);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        // Adjust the size of the button so that it takes up most of the screen space.
-        // mPanicButton.setWidth();
-        // mPanicButton.setHeight();
-
         Hub.getInstance().addListener(mListener);
-
     }
 
     @Override
@@ -177,14 +200,18 @@ public class Home extends ActionBarActivity implements LocationListener {
 
         @Override
         public void onDisconnect(Myo myo, long timestamp) {
-            Toast.makeText(Home.this, "Myo Disconnected!", Toast.LENGTH_SHORT).show();
+            myo.vibrate(Myo.VibrationType.LONG);
         }
 
         @Override
         public void onPose(Myo myo, long timestamp, Pose pose) {
-            Toast.makeText(Home.this, "Pose: " + pose, Toast.LENGTH_SHORT).show();
 
-            //TODO: Do something awesome.
+            if (pose != pose.REST) {
+                Toast.makeText(Home.this, "Pose: " + pose, Toast.LENGTH_SHORT).show();
+                myo.vibrate(Myo.VibrationType.SHORT);
+                System.out.println("Pose: " + pose);
+            }
+
         }
     };
 
