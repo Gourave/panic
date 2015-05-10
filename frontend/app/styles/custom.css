@@ -57,3 +57,14 @@ nav.shrink .navbar-toggle {
 }
 
 .angular-google-map-container { height: 400px; }
+
+.hero{
+    background-attachment: fixed;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    vertical-align: middle;
+    background-image: url('http://s3.amazonaws.com/usersthink/11-large.jpg');
+    background-position: top right;
+    margin-bottom: 0;
+}
