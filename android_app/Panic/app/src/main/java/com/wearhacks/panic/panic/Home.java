@@ -25,6 +25,7 @@ import com.thalmic.myo.scanner.ScanActivity;
 import com.wearhacks.panic.panic.api.HttpMultipartUploader;
 import com.wearhacks.panic.panic.api.PanicPackage;
 import com.wearhacks.panic.panic.api.PanicPackageService;
+import com.wearhacks.panic.panic.smssending.SmsServices;
 
 import retrofit.Callback;
 import retrofit.RestAdapter;
@@ -56,6 +57,10 @@ public class Home extends ActionBarActivity implements LocationListener {
 
     private Vibrator v;
 
+    private SmsServices message;
+
+    private String panicMessage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +85,9 @@ public class Home extends ActionBarActivity implements LocationListener {
         mPanicButton = (Button)findViewById(R.id.bPanic);
         mChangeMyo = (Button)findViewById(R.id.bChangeMyo);
         mLayoutHome = (RelativeLayout)findViewById(R.id.container_home);
+
+        message = new SmsServices();
+        panicMessage = "I just pressed the panic button and need help RIGHT NOW. Please visit ";
 
         mPanicButton.setEnabled(true);
 
@@ -245,6 +253,8 @@ public class Home extends ActionBarActivity implements LocationListener {
                 @Override
                 public void success(String s, Response response) {
                     Log.d("HTTP: ", "Success!");
+
+                    message.sendTextMessage("6477200685", panicMessage + " Please visit http://panicapp.herokuapp.com");
                 }
 
                 @Override
