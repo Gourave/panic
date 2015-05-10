@@ -3,11 +3,25 @@ var app = module.exports = express();
 var mongoose = require('mongoose');
 var PanicPackage = require('./panicpackage.model.js');
 
-/* GET list of api routes */
 app.get('/', function(req, res) {
 	PanicPackage.find({},function(err, results){
 		res.json(results);
 	});
+});
+
+app.get('/markers', function(req, res) {
+	PanicPackage.find({},function(err, results){
+		var markersList = [];
+		for (var i = 0; i < results.length; i++) {
+			var result = results[i];
+			var newMarker = {
+				id : result._id ,latitude: result.latitude, longitude : result.longitude, title : result.name
+			};
+			markersList.push(newMarker);
+		}
+		res.json(markersList);
+	});
+	
 });
 
 var filename;
