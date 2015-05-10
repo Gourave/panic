@@ -3,8 +3,6 @@ package com.wearhacks.panic.panic;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
-import android.location.LocationListener;
-import android.nfc.Tag;
 import android.os.Vibrator;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -23,6 +21,7 @@ import com.thalmic.myo.Myo;
 import com.thalmic.myo.Pose;
 import com.thalmic.myo.scanner.ScanActivity;
 import com.wearhacks.panic.panic.api.HttpMultipartUploader;
+import com.wearhacks.panic.panic.api.Locator;
 import com.wearhacks.panic.panic.api.PanicPackage;
 import com.wearhacks.panic.panic.api.PanicPackageService;
 import com.wearhacks.panic.panic.smssending.SmsServices;
@@ -33,7 +32,9 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 
-public class Home extends ActionBarActivity implements LocationListener {
+public class Home extends ActionBarActivity {
+
+    public static Location currentLocation; //Yeah, we went there. #YOLO
 
     private String userLatitude;
     private String userLongitude;
@@ -65,6 +66,9 @@ public class Home extends ActionBarActivity implements LocationListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        Locator locator = new Locator(this);
+        locator.getCurrentLocation();
 
         name = "";
         heartbeat = 0;
@@ -180,6 +184,7 @@ public class Home extends ActionBarActivity implements LocationListener {
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
+            Toast.makeText(Home.this, currentLocation.getLatitude() + "", Toast.LENGTH_SHORT).show();
             Intent mOpenSettings = new Intent(this, Settings.class);
             startActivity(mOpenSettings);
 
@@ -188,22 +193,6 @@ public class Home extends ActionBarActivity implements LocationListener {
 
         return super.onOptionsItemSelected(item);
     }
-
-    @Override
-    public void onLocationChanged(Location location) {
-
-        userLatitude = Double.toString(location.getLatitude());
-        userLongitude = Double.toString(location.getLongitude());
-
-        // Below is for testing
-        Toast.makeText(Home.this, userLatitude, Toast.LENGTH_SHORT).show();
-    }
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) { }
-    @Override
-    public void onProviderEnabled(String provider) {  }
-    @Override
-    public void onProviderDisabled(String provider) { }
 
     private DeviceListener mListener = new AbstractDeviceListener() {
         @Override
@@ -244,10 +233,15 @@ public class Home extends ActionBarActivity implements LocationListener {
 
             pkg.name = name;
             pkg.heartbeat = heartbeat;
-            pkg.latitude = latitude;
-            pkg.longitude = longitude;
+            pkg.latitude = 43.6597;     //Just as a backup for the demo.
+            pkg.longitude = 79.3889;
             pkg.temperature = temperature;
             pkg.filename = audio.getFileName();
+
+            if (currentLocation != null) {
+                pkg.latitude = currentLocation.getLatitude();
+                pkg.longitude = currentLocation.getLongitude();
+            }
 
             service.submitPackage(pkg, new Callback<String>() {
                 @Override
