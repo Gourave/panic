@@ -14,8 +14,8 @@
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
     <link rel="stylesheet" href="styles/main.css">
-    <link rel="stylesheet" href="styles/custom.css">
     <link rel="stylesheet" href="styles/yeti.css">
+    <link rel="stylesheet" href="styles/custom.css">
     <!-- endbuild -->    
   </head>
   <body ng-app="frontendApp">
@@ -25,7 +25,6 @@
 
     <!-- Add your site or application content here -->
     <div class="container">
-      <div class="header">
 
         <nav class="navbar navbar-inverse navbar-fixed-top">
           <div class="container">
@@ -47,12 +46,10 @@
           </div>
         </nav>
 
-      </div>
     </div>
 
-    <div class="hero">
-        <div ng-view=""></div>
-    </div>
+
+    <div ng-view=""></div>
 
 
     <div class="container">

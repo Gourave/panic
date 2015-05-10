@@ -59,12 +59,41 @@ nav.shrink .navbar-toggle {
 .angular-google-map-container { height: 400px; }
 
 .hero{
+    margin-top: -50px;
     background-attachment: fixed;
     min-height: 100vh;
     display: flex;
     align-items: center;
     vertical-align: middle;
-    background-image: url('http://s3.amazonaws.com/usersthink/11-large.jpg');
-    background-position: top right;
+    background-image: url('/images/hero-background.jpg');
+    background-position: bottom;
     margin-bottom: 0;
+}
+
+.hero-inner{
+    width: 100%;
+    text-align: center;
+}
+
+.header{
+    margin-bottom: 0;
+}
+
+section{
+    height: 100vh;
+}
+
+.section-inner{
+    position: relative;
+    top: 50%;
+    transform: 	translateY(-50%);
+    text-align: center;
+}
+
+.section-inner .fa{
+    font-size: 128px;
+}
+
+.section-patterned{
+    background-color : #c4e3f3;
 }
