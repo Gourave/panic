@@ -47,11 +47,23 @@ public class Home extends ActionBarActivity implements LocationListener {
     private PanicPackageService service;
     private PanicPackage pkg;
 
+    private String name;
+    private int heartbeat;
+    private double latitude;
+    private double longitude;
+    private int temperature;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        name = "";
+        heartbeat = 0;
+        latitude = 0;
+        longitude = 0;
+        temperature = 0;
+        
         audio = new AudioRecording(getApplicationContext());
         mPanicButton = (Button)findViewById(R.id.bPanic);
         mChangeMyo = (Button)findViewById(R.id.bChangeMyo);
@@ -97,11 +109,11 @@ public class Home extends ActionBarActivity implements LocationListener {
                 //audio.onRecord(false);
 
 
-                pkg.name = "asd";
-                pkg.heartbeat = 12;
-                pkg.latitude = 1;
-                pkg.longitude = 4;
-                pkg.temperature = 20;
+                pkg.name = name;
+                pkg.heartbeat = heartbeat;
+                pkg.latitude = latitude;
+                pkg.longitude = longitude;
+                pkg.temperature = temperature;
                 pkg.filename = audio.getFileName();
 
                 service.submitPackage(pkg, new Callback<String>() {
