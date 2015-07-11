@@ -116,29 +116,7 @@ public class Home extends ActionBarActivity {
         mPanicButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Perform action on click
-                /*audio.onRecord(true);
-
-                pkg.name = name;
-                pkg.heartbeat = heartbeat;
-                pkg.latitude = latitude;
-                pkg.longitude = longitude;
-                pkg.temperature = temperature;
-                pkg.filename = audio.getFileName();
-
-                service.submitPackage(pkg, new Callback<String>() {
-                    @Override
-                    public void success(String s, Response response) {
-                        Log.d("HTTP: ", "Success!");
-                    }
-
-                    @Override
-                    public void failure(RetrofitError error) {
-                        Log.d("HTTP: ", "Failed: " + error.getMessage());
-                    }
-                });*/
                 panicCommand();
-
-
             }
         });
 
@@ -184,7 +162,6 @@ public class Home extends ActionBarActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
-            Toast.makeText(Home.this, currentLocation.getLatitude() + "", Toast.LENGTH_SHORT).show();
             Intent mOpenSettings = new Intent(this, Settings.class);
             startActivity(mOpenSettings);
 
