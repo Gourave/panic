@@ -14,7 +14,7 @@ and then `grunt serve` to monitor changes made.
 #Android App
 ##API
 This package contains the class' and interfaces needed to send and receive information from the cloud.
-Uses Retrofit to communicate with API.
+Uses `Retrofit` to communicate with API.
 
 ##SMS Sending
 This package contains the needed files inorder to deal with the tasks involved with sending textmessages.
