@@ -1,5 +1,5 @@
 # Panic
-Wearhacks Toronto 2015 Hackathon submission
+Wearhacks Toronto 2015 Hackathon submission.
 
 ==========================================================
 #Frontend Setup
